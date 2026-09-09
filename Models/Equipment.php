@@ -26,6 +26,13 @@ class Equipment extends Model
 
     protected $casts = ['rate' => 'decimal:2'];
 
+    protected $appends = ['group_name'];
+
+    public function getGroupNameAttribute(): ?string
+    {
+        return $this->subgroup?->group?->name;
+    }
+
     public function uniqueIds(): array
     {
         return ['ulid'];
