@@ -23,7 +23,7 @@ class CustomerEquipmentController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $query = CustomerEquipment::with('customer:id,code,name', 'equipment:id,code,name');
+        $query = CustomerEquipment::with('customer:id,code,name', 'equipment:id,code,name,subgroup_id,category_id', 'equipment.subgroup:id,code,name,group_id', 'equipment.subgroup.group:id,code,name', 'equipment.category:id,code,name');
 
         if ($request->filled('customer_id')) {
             $query->where('customer_id', $request->integer('customer_id'));
@@ -67,7 +67,7 @@ class CustomerEquipmentController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $entity = CustomerEquipment::with('customer:id,code,name', 'equipment:id,code,name')->find($id);
+        $entity = CustomerEquipment::with('customer:id,code,name', 'equipment:id,code,name,subgroup_id,category_id', 'equipment.subgroup:id,code,name,group_id', 'equipment.subgroup.group:id,code,name', 'equipment.category:id,code,name')->find($id);
 
         if (! $entity) {
             return response()->json(['message' => 'CustomerEquipment not found'], 404);

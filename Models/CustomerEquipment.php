@@ -35,6 +35,23 @@ class CustomerEquipment extends Model
         'cert_expired' => 'date:Y-m-d',
     ];
 
+    protected $appends = ['equipment_category_name', 'equipment_subgroup_name', 'equipment_group_name'];
+
+    public function getEquipmentCategoryNameAttribute(): ?string
+    {
+        return $this->equipment?->category?->name;
+    }
+
+    public function getEquipmentSubgroupNameAttribute(): ?string
+    {
+        return $this->equipment?->subgroup?->name;
+    }
+
+    public function getEquipmentGroupNameAttribute(): ?string
+    {
+        return $this->equipment?->subgroup?->group?->name;
+    }
+
     public function uniqueIds(): array
     {
         return ['ulid'];
