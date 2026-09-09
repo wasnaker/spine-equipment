@@ -44,7 +44,9 @@ return [
              'permissions' => ['equipment:*']],
         ],
         'grants' => [
-            'staff' => ['equipment:view'],
+            'customer' => ['equipment:view'],
+            'surveyor' => ['equipment:view'],
+            'agency'   => ['equipment:view'],
         ],
     ],
 ];
