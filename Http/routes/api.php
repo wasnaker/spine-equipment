@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Modules\Equipment\Http\Controllers\CustomerEquipmentController;
 use Modules\Equipment\Http\Controllers\EquipmentCategoryController;
 use Modules\Equipment\Http\Controllers\EquipmentController;
 use Modules\Equipment\Http\Controllers\EquipmentGroupController;
@@ -65,5 +66,14 @@ Route::prefix('api/v1')->middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [EquipmentController::class, 'update'])->whereNumber('id')->middleware('permission:equipment:edit');
         Route::get('/{id}/activity-logs', [EquipmentController::class, 'activityLogs'])->whereNumber('id')->middleware('permission:equipment:view');
         Route::delete('/{id}', [EquipmentController::class, 'destroy'])->whereNumber('id')->middleware('permission:equipment:delete');
+    });
+
+    Route::prefix('customer-equipments')->group(function () {
+        Route::get('/', [CustomerEquipmentController::class, 'index'])->middleware('permission:equipment:view');
+        Route::post('/', [CustomerEquipmentController::class, 'store'])->middleware('permission:equipment:create');
+        Route::get('/{id}', [CustomerEquipmentController::class, 'show'])->whereNumber('id')->middleware('permission:equipment:view');
+        Route::put('/{id}', [CustomerEquipmentController::class, 'update'])->whereNumber('id')->middleware('permission:equipment:edit');
+        Route::get('/{id}/activity-logs', [CustomerEquipmentController::class, 'activityLogs'])->whereNumber('id')->middleware('permission:equipment:view');
+        Route::delete('/{id}', [CustomerEquipmentController::class, 'destroy'])->whereNumber('id')->middleware('permission:equipment:delete');
     });
 });

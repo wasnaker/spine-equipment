@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Equipment\Listeners;
 
+use Modules\Equipment\Models\CustomerEquipment;
 use Modules\Equipment\Models\Equipment;
 use Modules\Equipment\Models\EquipmentCategory;
 use Modules\Equipment\Models\EquipmentGroup;
@@ -24,6 +25,7 @@ class LogEquipmentActivity
         EquipmentSubgroup::class,
         EquipmentCategory::class,
         Equipment::class,
+        CustomerEquipment::class,
     ];
 
     public function __construct(private readonly ActivityLogService $activityLog)
@@ -37,7 +39,7 @@ class LogEquipmentActivity
         }
 
         $this->activityLog->log(
-            $this->label($event->entity) . ' created: ' . ($event->entity->name ?? $event->entity->getKey()),
+            $this->label($event->entity) . ' created: ' . $this->displayName($event->entity),
             $event->entity,
             $this->user(),
             ['event' => 'created'],
@@ -53,7 +55,7 @@ class LogEquipmentActivity
         $changes = $event->changes;
 
         $this->activityLog->log(
-            $this->label($event->entity) . ' updated: ' . ($event->entity->name ?? $event->entity->getKey()) . ' (' . $this->describe($event->entity, $changes) . ')',
+            $this->label($event->entity) . ' updated: ' . $this->displayName($event->entity) . ' (' . $this->describe($event->entity, $changes) . ')',
             $event->entity,
             $this->user(),
             ['event' => 'updated', 'changes' => $changes],
@@ -67,7 +69,7 @@ class LogEquipmentActivity
         }
 
         $this->activityLog->log(
-            $this->label($event->entity) . ' deleted: ' . ($event->entity->name ?? $event->entity->getKey()),
+            $this->label($event->entity) . ' deleted: ' . $this->displayName($event->entity),
             null,
             $this->user(),
             ['event' => 'deleted', 'id' => $event->entity->getKey()],
@@ -81,12 +83,22 @@ class LogEquipmentActivity
         return in_array(get_class($entity), self::MODELS, true);
     }
 
+    private function displayName(object $entity): string
+    {
+        if ($entity instanceof CustomerEquipment) {
+            return $entity->unit_name ?? $entity->getKey();
+        }
+
+        return $entity->name ?? $entity->getKey();
+    }
+
     private function label(object $entity): string
     {
         return match (get_class($entity)) {
             EquipmentGroup::class => 'EquipmentGroup',
             EquipmentSubgroup::class => 'EquipmentSubgroup',
             EquipmentCategory::class => 'EquipmentCategory',
+            CustomerEquipment::class => 'CustomerEquipment',
             default => 'Equipment',
         };
     }
