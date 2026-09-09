@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Equipment\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,6 +14,7 @@ use Spine\Traits\HasLifecycleHooks;
 class Equipment extends Model
 {
     use HasLifecycleHooks;
+    use HasUlids;
     use SoftDeletes;
 
     protected $table = 'equipments';
@@ -23,6 +25,11 @@ class Equipment extends Model
     ];
 
     protected $casts = ['rate' => 'decimal:2'];
+
+    public function uniqueIds(): array
+    {
+        return ['ulid'];
+    }
 
     public const STATUS_DRAFT = 'draft';
     public const STATUS_ACTIVE = 'active';

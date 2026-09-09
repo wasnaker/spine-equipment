@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Equipment\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,6 +14,7 @@ use Spine\Traits\HasLifecycleHooks;
 class EquipmentSubgroup extends Model
 {
     use HasLifecycleHooks;
+    use HasUlids;
     use SoftDeletes;
 
     protected $table = 'equipment_subgroups';
@@ -20,6 +22,11 @@ class EquipmentSubgroup extends Model
     protected $fillable = ['code', 'name', 'group_id', 'is_active'];
 
     protected $casts = ['is_active' => 'boolean'];
+
+    public function uniqueIds(): array
+    {
+        return ['ulid'];
+    }
 
     public function group(): BelongsTo
     {

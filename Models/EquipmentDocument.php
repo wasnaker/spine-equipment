@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Equipment\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,6 +17,7 @@ use Spine\Traits\HasLifecycleHooks;
 class EquipmentDocument extends Model
 {
     use HasLifecycleHooks;
+    use HasUlids;
     use SoftDeletes;
 
     protected $table = 'equipment_documents';
@@ -34,6 +36,11 @@ class EquipmentDocument extends Model
         'total_tax' => 'decimal:2',
         'total' => 'decimal:2',
     ];
+
+    public function uniqueIds(): array
+    {
+        return ['ulid'];
+    }
 
     public function items(): HasMany
     {
