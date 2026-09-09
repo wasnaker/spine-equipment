@@ -1,0 +1,11 @@
+{
+    "name": "Equipment",
+    "alias": "equipment",
+    "description": "Katalog equipment hierarkis (Category -> Subgroup -> Item) + dokumen kirim-customer.",
+    "version": "1.0.0",
+    "active": true,
+    "order": 0,
+    "providers": [
+        "Modules\\Equipment\\Providers\\EquipmentServiceProvider"
+    ]
+}

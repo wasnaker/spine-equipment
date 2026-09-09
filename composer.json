@@ -1,0 +1,19 @@
+{
+    "name": "wasnaker/spine-equipment",
+    "description": "Spine Equipment module — katalog equipment hierarkis (Category -> Subgroup -> Item), ported dari prfx-equipments (Perfex).",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Modules\\Equipment\\": ""
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Equipment\\Providers\\EquipmentServiceProvider"
+            ]
+        }
+    },
+    "require": {}
+}
