@@ -50,4 +50,19 @@ class Equipment extends Model
     {
         return $this->belongsTo(User::class, 'admin_id');
     }
+
+    public static function labels(): array
+    {
+        return [
+            'code'        => 'Kode',
+            'name'        => 'Nama',
+            'description' => 'Deskripsi',
+            'rate'        => 'Tarif',
+            'unit'        => 'Satuan',
+            'subgroup_id' => 'Subgroup',
+            'category_id' => 'Kategori',
+            'status'      => 'Status',
+            'admin_id'    => 'Admin',
+        ];
+    }
 }

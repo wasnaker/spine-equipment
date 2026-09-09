@@ -9,12 +9,16 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use Modules\Equipment\Models\Equipment;
+use Spine\Services\ActivityLogService;
 
 /**
  * CRUD Equipment — item katalog (Group -> Subgroup -> Item).
  */
 class EquipmentController extends Controller
 {
+    public function __construct(private readonly ActivityLogService $activityLog)
+    {
+    }
     public function index(Request $request): JsonResponse
     {
         $query = Equipment::with('subgroup:id,code,name,group_id', 'category:id,code,name', 'admin:id,name');
@@ -106,5 +110,30 @@ class EquipmentController extends Controller
         $entity->delete();
 
         return response()->json(['message' => 'Equipment deleted']);
+    }
+
+    public function activityLogs(int $id): JsonResponse
+    {
+        $entity = Equipment::find($id);
+
+        if (! $entity) {
+            return response()->json(['message' => 'Equipment not found'], 404);
+        }
+
+        $logs = $this->activityLog
+            ->query()
+            ->where('subject_type', Equipment::class)
+            ->where('subject_id', $id)
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(fn ($log) => [
+                'id'          => $log->id,
+                'description' => $log->description,
+                'causer'      => $log->causer?->name ?? 'System',
+                'properties'  => $log->properties,
+                'at'          => $log->created_at?->toIso8601String(),
+            ]);
+
+        return response()->json(['data' => $logs]);
     }
 }

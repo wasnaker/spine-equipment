@@ -57,6 +57,7 @@ Route::prefix('api/v1')->middleware('auth:sanctum')->group(function () {
         Route::post('/', [EquipmentController::class, 'store'])->middleware('permission:equipment:create');
         Route::get('/{id}', [EquipmentController::class, 'show'])->whereNumber('id')->middleware('permission:equipment:view');
         Route::put('/{id}', [EquipmentController::class, 'update'])->whereNumber('id')->middleware('permission:equipment:edit');
+        Route::get('/{id}/activity-logs', [EquipmentController::class, 'activityLogs'])->whereNumber('id')->middleware('permission:equipment:view');
         Route::delete('/{id}', [EquipmentController::class, 'destroy'])->whereNumber('id')->middleware('permission:equipment:delete');
     });
 });
