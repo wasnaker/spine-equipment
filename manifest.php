@@ -19,6 +19,12 @@ return [
             'href'       => '/equipments',
             'position'   => 40,
             'permission' => 'equipment:view',
+            'children'   => [
+                ['title' => 'Items',      'url' => '/equipments'],
+                ['title' => 'Group',      'url' => '/equipment-groups'],
+                ['title' => 'Subgroup',   'url' => '/equipment-subgroups'],
+                ['title' => 'Category',   'url' => '/equipment-categories'],
+            ],
         ],
     ],
 
