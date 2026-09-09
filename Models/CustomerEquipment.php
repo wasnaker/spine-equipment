@@ -24,7 +24,7 @@ class CustomerEquipment extends Model
     protected $table = 'customer_equipments';
 
     protected $fillable = [
-        'code', 'unit_code', 'unit_name', 'equipment_id', 'customer_id',
+        'unit_code', 'unit_name', 'equipment_id', 'customer_id',
         'serial_no', 'location', 'procurement_year', 'manufacture_year',
         'cert_expired', 'status',
     ];
@@ -32,7 +32,7 @@ class CustomerEquipment extends Model
     protected $casts = [
         'procurement_year' => 'integer',
         'manufacture_year' => 'integer',
-        'cert_expired' => 'date',
+        'cert_expired' => 'date:Y-m-d',
     ];
 
     public function uniqueIds(): array
@@ -42,18 +42,19 @@ class CustomerEquipment extends Model
 
     protected static function booted(): void
     {
-        // code = EntityCode::encode(id, 4); id belum ada saat pre-insert, jadi
-        // temp dulu (kolom unique), final di created via saveQuietly (tanpa event).
+        // unit_code = EntityCode::encode(id, 4) — pola kode customer.
+        // id belum ada saat pre-insert, jadi temp dulu (kolom unique), final
+        // di created via saveQuietly (tanpa event).
         // PITFALL: pakai `saving`, bukan `creating` — listener creating milik
         // trait HasLifecycleHooks return `true` yang meng-halt listener lain.
         static::saving(function (self $model) {
-            if (empty($model->code)) {
-                $model->code = 'TMP-' . strtoupper(substr((string) str()->ulid(), 0, 10));
+            if (empty($model->unit_code)) {
+                $model->unit_code = 'TMP-' . strtoupper(substr((string) str()->ulid(), 0, 10));
             }
         });
 
         static::created(function (self $model) {
-            $model->code = \Spine\Support\EntityCode::encode($model->id, 4);
+            $model->unit_code = \Spine\Support\EntityCode::encode($model->id, 4);
             $model->saveQuietly();
         });
     }
@@ -71,7 +72,6 @@ class CustomerEquipment extends Model
     public static function labels(): array
     {
         return [
-            'code'             => 'Kode',
             'unit_code'        => 'Unit Code',
             'unit_name'        => 'Unit Name',
             'equipment_id'     => 'Equipment Type',

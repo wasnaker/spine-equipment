@@ -46,7 +46,7 @@ class CustomerEquipmentController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'unit_code'        => ['required', 'string', 'max:50'],
+            'unit_code'        => ['nullable', 'string', 'max:50'],
             'unit_name'        => ['required', 'string', 'max:190'],
             'equipment_id'     => ['nullable', 'integer', 'exists:equipments,id'],
             'customer_id'      => ['required', 'integer', 'exists:customers,id'],
@@ -85,7 +85,7 @@ class CustomerEquipmentController extends Controller
         }
 
         $validated = $request->validate([
-            'unit_code'        => ['sometimes', 'string', 'max:50'],
+            'unit_code'        => ['sometimes', 'nullable', 'string', 'max:50'],
             'unit_name'        => ['sometimes', 'string', 'max:190'],
             'equipment_id'     => ['nullable', 'integer', 'exists:equipments,id'],
             'customer_id'      => ['sometimes', 'integer', 'exists:customers,id'],
