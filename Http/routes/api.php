@@ -32,6 +32,8 @@ Route::prefix('api/v1')->middleware('auth:sanctum')->group(function () {
         Route::get('/', [EquipmentGroupController::class, 'index'])->middleware('permission:equipment:view');
         Route::post('/', [EquipmentGroupController::class, 'store'])->middleware('permission:equipment:create');
         Route::get('/{id}', [EquipmentGroupController::class, 'show'])->whereNumber('id')->middleware('permission:equipment:view');
+        Route::get('/{id}/subgroups', [EquipmentGroupController::class, 'subgroups'])->whereNumber('id')->middleware('permission:equipment:view');
+        Route::get('/{id}/activity-logs', [EquipmentGroupController::class, 'activityLogs'])->whereNumber('id')->middleware('permission:equipment:view');
         Route::put('/{id}', [EquipmentGroupController::class, 'update'])->whereNumber('id')->middleware('permission:equipment:edit');
         Route::delete('/{id}', [EquipmentGroupController::class, 'destroy'])->whereNumber('id')->middleware('permission:equipment:delete');
     });
@@ -40,6 +42,8 @@ Route::prefix('api/v1')->middleware('auth:sanctum')->group(function () {
         Route::get('/', [EquipmentSubgroupController::class, 'index'])->middleware('permission:equipment:view');
         Route::post('/', [EquipmentSubgroupController::class, 'store'])->middleware('permission:equipment:create');
         Route::get('/{id}', [EquipmentSubgroupController::class, 'show'])->whereNumber('id')->middleware('permission:equipment:view');
+        Route::get('/{id}/categories', [EquipmentSubgroupController::class, 'categories'])->whereNumber('id')->middleware('permission:equipment:view');
+        Route::get('/{id}/activity-logs', [EquipmentSubgroupController::class, 'activityLogs'])->whereNumber('id')->middleware('permission:equipment:view');
         Route::put('/{id}', [EquipmentSubgroupController::class, 'update'])->whereNumber('id')->middleware('permission:equipment:edit');
         Route::delete('/{id}', [EquipmentSubgroupController::class, 'destroy'])->whereNumber('id')->middleware('permission:equipment:delete');
     });
@@ -48,6 +52,8 @@ Route::prefix('api/v1')->middleware('auth:sanctum')->group(function () {
         Route::get('/', [EquipmentCategoryController::class, 'index'])->middleware('permission:equipment:view');
         Route::post('/', [EquipmentCategoryController::class, 'store'])->middleware('permission:equipment:create');
         Route::get('/{id}', [EquipmentCategoryController::class, 'show'])->whereNumber('id')->middleware('permission:equipment:view');
+        Route::get('/{id}/equipments', [EquipmentCategoryController::class, 'equipments'])->whereNumber('id')->middleware('permission:equipment:view');
+        Route::get('/{id}/activity-logs', [EquipmentCategoryController::class, 'activityLogs'])->whereNumber('id')->middleware('permission:equipment:view');
         Route::put('/{id}', [EquipmentCategoryController::class, 'update'])->whereNumber('id')->middleware('permission:equipment:edit');
         Route::delete('/{id}', [EquipmentCategoryController::class, 'destroy'])->whereNumber('id')->middleware('permission:equipment:delete');
     });

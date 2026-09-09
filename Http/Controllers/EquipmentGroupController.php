@@ -9,12 +9,17 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use Modules\Equipment\Models\EquipmentGroup;
+use Modules\Equipment\Models\EquipmentSubgroup;
+use Spine\Services\ActivityLogService;
 
 /**
  * CRUD EquipmentGroup — level tertinggi katalog (Group -> Subgroup -> Item).
  */
 class EquipmentGroupController extends Controller
 {
+    public function __construct(private readonly ActivityLogService $activityLog)
+    {
+    }
     public function index(Request $request): JsonResponse
     {
         $query = EquipmentGroup::query();
@@ -91,5 +96,45 @@ class EquipmentGroupController extends Controller
         $entity->delete();
 
         return response()->json(['message' => 'EquipmentGroup deleted']);
+    }
+
+    public function subgroups(int $id): JsonResponse
+    {
+        $entity = EquipmentGroup::find($id);
+
+        if (! $entity) {
+            return response()->json(['message' => 'EquipmentGroup not found'], 404);
+        }
+
+        $rows = EquipmentSubgroup::where('group_id', $id)
+            ->orderBy('name')
+            ->get(['id', 'code', 'name', 'is_active']);
+
+        return response()->json(['data' => $rows]);
+    }
+
+    public function activityLogs(int $id): JsonResponse
+    {
+        $entity = EquipmentGroup::find($id);
+
+        if (! $entity) {
+            return response()->json(['message' => 'EquipmentGroup not found'], 404);
+        }
+
+        $logs = $this->activityLog
+            ->query()
+            ->where('subject_type', EquipmentGroup::class)
+            ->where('subject_id', $id)
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(fn ($log) => [
+                'id'          => $log->id,
+                'description' => $log->description,
+                'causer'      => $log->causer?->name ?? 'System',
+                'properties'  => $log->properties,
+                'at'          => $log->created_at?->toIso8601String(),
+            ]);
+
+        return response()->json(['data' => $logs]);
     }
 }

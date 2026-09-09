@@ -31,4 +31,20 @@ class EquipmentCategory extends Model
     {
         return $this->hasMany(Equipment::class, 'category_id');
     }
+
+    public function subgroup(): BelongsTo
+    {
+        return $this->belongsTo(EquipmentSubgroup::class, 'subgroup_id');
+    }
+
+    public static function labels(): array
+    {
+        return [
+            'code'        => 'Kode',
+            'name'        => 'Nama',
+            'subgroup_id' => 'Subgroup',
+            'sort_order'  => 'Urutan',
+            'is_active'   => 'Aktif',
+        ];
+    }
 }

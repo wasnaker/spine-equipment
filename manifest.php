@@ -44,6 +44,7 @@ return [
     ],
 
     'detail_tabs' => [
+        // Equipments (item katalog)
         [
             'slug'       => 'overview',
             'label'      => 'Overview',
@@ -57,6 +58,81 @@ return [
             'label'      => 'Activity',
             'icon'       => '🕐',
             'api'        => '/api/v1/equipments/{id}/activity-logs',
+            'position'   => 20,
+            'permission' => 'equipment:view',
+        ],
+        // Group
+        [
+            'slug'       => 'overview',
+            'label'      => 'Overview',
+            'icon'       => '👁️',
+            'api'        => '/api/v1/equipment-groups/{id}',
+            'position'   => 10,
+            'permission' => 'equipment:view',
+        ],
+        [
+            'slug'       => 'subgroups',
+            'label'      => 'Subgroups',
+            'icon'       => '🗂️',
+            'api'        => '/api/v1/equipment-groups/{id}/subgroups',
+            'position'   => 15,
+            'permission' => 'equipment:view',
+        ],
+        [
+            'slug'       => 'activity',
+            'label'      => 'Activity',
+            'icon'       => '🕐',
+            'api'        => '/api/v1/equipment-groups/{id}/activity-logs',
+            'position'   => 20,
+            'permission' => 'equipment:view',
+        ],
+        // Subgroup
+        [
+            'slug'       => 'overview',
+            'label'      => 'Overview',
+            'icon'       => '👁️',
+            'api'        => '/api/v1/equipment-subgroups/{id}',
+            'position'   => 10,
+            'permission' => 'equipment:view',
+        ],
+        [
+            'slug'       => 'categories',
+            'label'      => 'Categories',
+            'icon'       => '🏷️',
+            'api'        => '/api/v1/equipment-subgroups/{id}/categories',
+            'position'   => 15,
+            'permission' => 'equipment:view',
+        ],
+        [
+            'slug'       => 'activity',
+            'label'      => 'Activity',
+            'icon'       => '🕐',
+            'api'        => '/api/v1/equipment-subgroups/{id}/activity-logs',
+            'position'   => 20,
+            'permission' => 'equipment:view',
+        ],
+        // Category
+        [
+            'slug'       => 'overview',
+            'label'      => 'Overview',
+            'icon'       => '👁️',
+            'api'        => '/api/v1/equipment-categories/{id}',
+            'position'   => 10,
+            'permission' => 'equipment:view',
+        ],
+        [
+            'slug'       => 'equipments',
+            'label'      => 'Equipments',
+            'icon'       => '🛠️',
+            'api'        => '/api/v1/equipment-categories/{id}/equipments',
+            'position'   => 15,
+            'permission' => 'equipment:view',
+        ],
+        [
+            'slug'       => 'activity',
+            'label'      => 'Activity',
+            'icon'       => '🕐',
+            'api'        => '/api/v1/equipment-categories/{id}/activity-logs',
             'position'   => 20,
             'permission' => 'equipment:view',
         ],

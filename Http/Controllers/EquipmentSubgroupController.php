@@ -8,13 +8,18 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Modules\Equipment\Models\EquipmentCategory;
 use Modules\Equipment\Models\EquipmentSubgroup;
+use Spine\Services\ActivityLogService;
 
 /**
  * CRUD EquipmentSubgroup — anak group (Group -> Subgroup -> Item).
  */
 class EquipmentSubgroupController extends Controller
 {
+    public function __construct(private readonly ActivityLogService $activityLog)
+    {
+    }
     public function index(Request $request): JsonResponse
     {
         $query = EquipmentSubgroup::with('group:id,code,name');
@@ -115,5 +120,45 @@ class EquipmentSubgroupController extends Controller
         $entity->delete();
 
         return response()->json(['message' => 'EquipmentSubgroup deleted']);
+    }
+
+    public function categories(int $id): JsonResponse
+    {
+        $entity = EquipmentSubgroup::find($id);
+
+        if (! $entity) {
+            return response()->json(['message' => 'EquipmentSubgroup not found'], 404);
+        }
+
+        $rows = EquipmentCategory::where('subgroup_id', $id)
+            ->orderBy('sort_order')->orderBy('name')
+            ->get(['id', 'code', 'name', 'sort_order', 'is_active']);
+
+        return response()->json(['data' => $rows]);
+    }
+
+    public function activityLogs(int $id): JsonResponse
+    {
+        $entity = EquipmentSubgroup::find($id);
+
+        if (! $entity) {
+            return response()->json(['message' => 'EquipmentSubgroup not found'], 404);
+        }
+
+        $logs = $this->activityLog
+            ->query()
+            ->where('subject_type', EquipmentSubgroup::class)
+            ->where('subject_id', $id)
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(fn ($log) => [
+                'id'          => $log->id,
+                'description' => $log->description,
+                'causer'      => $log->causer?->name ?? 'System',
+                'properties'  => $log->properties,
+                'at'          => $log->created_at?->toIso8601String(),
+            ]);
+
+        return response()->json(['data' => $logs]);
     }
 }

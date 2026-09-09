@@ -37,4 +37,14 @@ class EquipmentSubgroup extends Model
     {
         return $this->hasMany(Equipment::class, 'subgroup_id');
     }
+
+    public static function labels(): array
+    {
+        return [
+            'code'      => 'Kode',
+            'name'      => 'Nama',
+            'group_id'  => 'Group',
+            'is_active' => 'Aktif',
+        ];
+    }
 }
