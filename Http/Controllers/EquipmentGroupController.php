@@ -17,7 +17,7 @@ class EquipmentGroupController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = EquipmentGroup::withCount('subgroups');
+        $query = EquipmentGroup::query();
 
         if ($request->filled('q')) {
             $term = $request->string('q');

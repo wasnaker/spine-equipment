@@ -21,7 +21,7 @@ class EquipmentController extends Controller
     }
     public function index(Request $request): JsonResponse
     {
-        $query = Equipment::with('subgroup:id,code,name,group_id', 'category:id,code,name', 'admin:id,name');
+        $query = Equipment::with(['subgroup:id,code,name,group_id', 'subgroup.group:id,code,name', 'category:id,code,name', 'admin:id,name']);
 
         if ($request->filled('subgroup_id')) {
             $query->where('subgroup_id', $request->integer('subgroup_id'));
@@ -63,7 +63,7 @@ class EquipmentController extends Controller
 
     public function show(int $id): JsonResponse
     {
-        $entity = Equipment::with('subgroup:id,code,name,group_id', 'category:id,code,name', 'admin:id,name')->find($id);
+        $entity = Equipment::with(['subgroup:id,code,name,group_id', 'subgroup.group:id,code,name', 'category:id,code,name', 'admin:id,name'])->find($id);
 
         if (! $entity) {
             return response()->json(['message' => 'Equipment not found'], 404);

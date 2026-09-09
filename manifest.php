@@ -30,6 +30,19 @@ return [
 
     'widgets' => [],
 
+    'settings' => [
+        [
+            'slug'     => 'equipment',
+            'label'    => 'Equipment',
+            'icon'     => '🛠️',
+            'position' => 50,
+            'fields'   => [
+                ['key' => 'equipment_start_number', 'label' => 'Start Number', 'type' => 'number', 'default' => '60100'],
+                ['key' => 'equipment_code_length',  'label' => 'Code Length',  'type' => 'number', 'default' => '4'],
+            ],
+        ],
+    ],
+
     'detail_tabs' => [
         [
             'slug'       => 'overview',

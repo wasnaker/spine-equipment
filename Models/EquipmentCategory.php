@@ -18,7 +18,7 @@ class EquipmentCategory extends Model
 
     protected $table = 'equipment_categories';
 
-    protected $fillable = ['code', 'name', 'is_active'];
+    protected $fillable = ['code', 'name', 'subgroup_id', 'sort_order', 'is_active'];
 
     protected $casts = ['is_active' => 'boolean'];
 

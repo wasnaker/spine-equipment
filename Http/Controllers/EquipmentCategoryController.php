@@ -17,7 +17,7 @@ class EquipmentCategoryController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = EquipmentCategory::withCount('equipments');
+        $query = EquipmentCategory::query();
 
         if ($request->filled('q')) {
             $term = $request->string('q');
