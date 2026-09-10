@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Equipment\Listeners;
 
 use Modules\Equipment\Models\CustomerEquipment;
+use Modules\Customer\Models\Customer;
 use Modules\Equipment\Models\Equipment;
 use Modules\Equipment\Models\EquipmentCategory;
 use Modules\Equipment\Models\EquipmentGroup;
@@ -108,13 +109,27 @@ class LogEquipmentActivity
         $parts = [];
         $labels = method_exists($entity, 'labels') ? $entity::labels() : [];
 
+        // FK ditampilkan sebagai nama, bukan id (equipment/customer).
+        $fkNames = [
+            'equipment_id' => Equipment::class,
+            'customer_id'  => Customer::class,
+        ];
+
         foreach ($changes as $field => $change) {
             if (in_array($field, ['updated_at', 'remember_token'], true)) {
                 continue;
             }
 
+            $old = $change['old'];
+            $new = $change['new'];
+            if (isset($fkNames[$field])) {
+                $model = $fkNames[$field];
+                $old = $model::find($old)?->name ?? $old;
+                $new = $model::find($new)?->name ?? $new;
+            }
+
             $label = $labels[$field] ?? $field;
-            $parts[] = $label . ': ' . $change['old'] . ' -> ' . $change['new'];
+            $parts[] = $label . ': ' . $old . ' -> ' . $new;
         }
 
         return implode(', ', $parts);

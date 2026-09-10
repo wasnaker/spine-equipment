@@ -77,8 +77,8 @@ class CustomerEquipmentController extends Controller
         $validated = $request->validate([
             'unit_code'        => ['nullable', 'string', 'max:50'],
             'unit_name'        => ['required', 'string', 'max:190'],
-            'equipment_id'     => ['nullable', 'integer', 'exists:equipments,id'],
-            'customer_id'      => ['required', 'integer', 'exists:customers,id'],
+            'equipment_id'     => ['required', 'integer', 'exists:equipments,id'],
+            'customer_id'      => ['nullable', 'integer', 'exists:customers,id'],
             'serial_no'        => ['nullable', 'string', 'max:100'],
             'location'         => ['nullable', 'string', 'max:150'],
             'procurement_year' => ['nullable', 'integer', 'min:1900', 'max:2100'],
@@ -91,6 +91,11 @@ class CustomerEquipmentController extends Controller
         if (! $this->isFullAccess($request)) {
             $actor = $this->actors->resolve($request->user());
             $validated['customer_id'] = $actor['entity']->id;
+        } elseif (empty($validated['customer_id'])) {
+            return response()->json([
+                'message' => 'The customer id field is required.',
+                'errors'  => ['customer_id' => ['The customer id field is required.']],
+            ], 422);
         }
 
         $entity = CustomerEquipment::create($validated);

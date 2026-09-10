@@ -18,7 +18,7 @@ return [
             'icon'       => '🛠️',
             'href'       => '/equipments',
             'position'   => 40,
-            'permission' => 'equipment:view',
+            'permission' => 'equipment:view|customer-equipment:view',
             'children'   => [
                 ['title' => 'Items',        'url' => '/equipments'],
                 ['title' => 'Group',        'url' => '/equipment-groups'],
@@ -29,7 +29,9 @@ return [
         ],
     ],
 
-    'widgets' => [],
+    'widgets' => [
+        ['id' => 'customer-equipments', 'area' => 'right-4', 'title' => 'My Equipment', 'api' => '/api/v1/customer-equipments'],
+    ],
 
     'settings' => [
         [
@@ -144,7 +146,7 @@ return [
             'icon'       => '👁️',
             'api'        => '/api/v1/customer-equipments/{id}',
             'position'   => 10,
-            'permission' => 'equipment:view',
+            'permission' => 'customer-equipment:view',
         ],
         [
             'slug'       => 'activity',
@@ -152,17 +154,18 @@ return [
             'icon'       => '🕐',
             'api'        => '/api/v1/customer-equipments/{id}/activity-logs',
             'position'   => 20,
-            'permission' => 'equipment:view',
+            'permission' => 'customer-equipment:view',
         ],
     ],
 
     'rbac' => [
         'permissions' => [
             'equipment:view', 'equipment:create', 'equipment:edit', 'equipment:delete',
+            'customer-equipment:view', 'customer-equipment:create', 'customer-equipment:edit', 'customer-equipment:delete',
         ],
         'roles' => [
             ['name' => 'equipment-admin', 'label' => 'Equipment Admin',
-             'permissions' => ['equipment:*']],
+             'permissions' => ['equipment:*', 'customer-equipment:*']],
         ],
         'grants' => [
             'customer' => ['equipment:view'],
